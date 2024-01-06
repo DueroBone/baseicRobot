@@ -34,10 +34,11 @@ public final class Constants {
             public static final int driveAmpsMax = 20;
             public static final int drivingExponent = 1;
             public static final double drivingRamp = 0.1;
-            public static final double drivingDeadband = 0.1;
+            public static final double controllerJoystickDeadband = 0.1;
+            public static final double controllerTriggerDeadband = 0.1;
             public static final double drivingMax = 1;
       }
-      
+
       /**
        * For all non-driving devices
        */
@@ -47,7 +48,7 @@ public final class Constants {
             public static final int armExtenderId = 8;
             public static final int clawMotorId = 9;
             public static final int LightPWM = 0;
-            
+
             public static final int clawAmpsMax = 20;
             public static final int armAmpsMax = 20;
 
