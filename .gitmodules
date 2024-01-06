@@ -1,0 +1,3 @@
+[submodule "src/main/java/frc/robot/synced"]
+	path = src/main/java/frc/robot/synced
+	url = https://github.com/TribeTech4485/SyncedCommands
