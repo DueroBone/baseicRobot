@@ -49,9 +49,6 @@ public class DriveTrain extends SubsystemBase {
 
   private DoubleSolenoid gearChanger;
 
-  /*
-   * Creates a new DriveTrain.
-   */
   public DriveTrain() {
     System.out.print("Instatntiating drivetrain");
     motors.add(motorDriveLeft1);
@@ -214,7 +211,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void stop() {
-    System.out.println("in drivetrain stop");
+    System.out.println("Drivetrain stop");
     doTankDrive(0.0, 0.0);
   }
 
@@ -244,5 +241,15 @@ public class DriveTrain extends SubsystemBase {
         motor.setIdleMode(IdleMode.kCoast);
       }
     }
+  }
+
+  public void resetAll() {
+    System.out.println("Resetting DriveTrain");
+    stop();
+    resetEncoders();
+    resetGyro();
+    doHighGear(false);
+    doSlowMode(false);
+    setBrakeMode(true);
   }
 }
