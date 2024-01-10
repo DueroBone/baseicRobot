@@ -121,7 +121,7 @@ public class DriveTrain extends SubsystemBase {
       System.out.println("**driveTrain power L/R: " + leftDrivePercent + " | " + rightDrivePercent);
     }
     if (Math.abs(leftDrivePercent) > 0.01) {
-      driveGroupLeft.set(leftDrivePercent);
+      driveGroupLeft.
     } else {
       driveGroupLeft.stopMotor();
     }
