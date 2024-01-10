@@ -1,0 +1,3 @@
+[submodule "src/main/java/frc/robot/SyncedLibraries"]
+	path = src/main/java/frc/robot/SyncedLibraries
+	url = https://github.com/TribeTech4485/SyncedLibraries
