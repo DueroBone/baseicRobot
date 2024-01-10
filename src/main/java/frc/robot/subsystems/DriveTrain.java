@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
+// import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -63,7 +63,7 @@ public class DriveTrain extends SubsystemBase {
       motor.setSmartCurrentLimit(DriveConstants.driveAmpsMax);
       motor.setClosedLoopRampRate(DriveConstants.drivingRamp);
       motor.setOpenLoopRampRate(DriveConstants.drivingRamp);
-      motor.setIdleMode(IdleMode.kCoast);
+      // motor.setIdleMode(IdleMode.kCoast);
       motor.enableVoltageCompensation(11);
     }
 
@@ -121,7 +121,7 @@ public class DriveTrain extends SubsystemBase {
       System.out.println("**driveTrain power L/R: " + leftDrivePercent + " | " + rightDrivePercent);
     }
     if (Math.abs(leftDrivePercent) > 0.01) {
-      driveGroupLeft.
+      driveGroupLeft.set(rightDrivePercent);
     } else {
       driveGroupLeft.stopMotor();
     }
@@ -231,17 +231,17 @@ public class DriveTrain extends SubsystemBase {
     return current / motors.size();
   }
 
-  public void setBrakeMode(boolean brake) {
-    if (brake) {
-      for (CANSparkMax motor : motors) {
-        motor.setIdleMode(IdleMode.kBrake);
-      }
-    } else {
-      for (CANSparkMax motor : motors) {
-        motor.setIdleMode(IdleMode.kCoast);
-      }
-    }
-  }
+  // public void setBrakeMode(boolean brake) {
+  //   if (brake) {
+  //     for (CANSparkMax motor : motors) {
+  //       motor.setIdleMode(IdleMode.kBrake);
+  //     }
+  //   } else {
+  //     for (CANSparkMax motor : motors) {
+  //       motor.setIdleMode(IdleMode.kCoast);
+  //     }
+  //   }
+  // }
 
   public void resetAll() {
     System.out.println("Resetting DriveTrain");
@@ -250,6 +250,6 @@ public class DriveTrain extends SubsystemBase {
     resetGyro();
     doHighGear(false);
     doSlowMode(false);
-    setBrakeMode(true);
+    // setBrakeMode(true);
   }
 }
