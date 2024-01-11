@@ -36,6 +36,9 @@ public final class Constants {
             public static final double controllerJoystickDeadband = 0.1;
             public static final double controllerTriggerDeadband = 0.1;
             public static final double drivingMax = 1;
+
+            public static final double WHEEL_DIAMETER = 0; // inches
+            public static final double PULSES_PER_REVOLUTION = 0;
       }
 
       /**

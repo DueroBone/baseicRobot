@@ -5,15 +5,14 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -23,18 +22,20 @@ public class DriveTrain extends SubsystemBase {
 
   //// ----- Motor Controllers ----- /////
   // There are 6 separate motor controllers with 1 pwm channel per controller
-  public final CANSparkMax motorDriveLeft1 = new CANSparkMax(DriveConstants.leftDrive1Id, MotorType.kBrushless);
-  public final CANSparkMax motorDriveLeft2 = new CANSparkMax(DriveConstants.leftDrive2Id, MotorType.kBrushless);
-  public final CANSparkMax motorDriveLeft3 = new CANSparkMax(DriveConstants.leftDrive3Id, MotorType.kBrushless);
-  public final CANSparkMax motorDriveRight1 = new CANSparkMax(DriveConstants.rightDrive1Id, MotorType.kBrushless);
-  public final CANSparkMax motorDriveRight2 = new CANSparkMax(DriveConstants.rightDrive2Id, MotorType.kBrushless);
-  public final CANSparkMax motorDriveRight3 = new CANSparkMax(DriveConstants.rightDrive3Id, MotorType.kBrushless);
-  ArrayList<CANSparkMax> motors = new ArrayList<CANSparkMax>(); // UPDATE
+  public final CANSparkMax motorDriveLeft1 = new CANSparkMax(DriveConstants.leftDrive1Id, CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax motorDriveLeft2 = new CANSparkMax(DriveConstants.leftDrive2Id, CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax motorDriveLeft3 = new CANSparkMax(DriveConstants.leftDrive3Id, CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax motorDriveRight1 = new CANSparkMax(DriveConstants.rightDrive1Id, CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax motorDriveRight2 = new CANSparkMax(DriveConstants.rightDrive2Id, CANSparkLowLevel.MotorType.kBrushless);
+  public final CANSparkMax motorDriveRight3 = new CANSparkMax(DriveConstants.rightDrive3Id, CANSparkLowLevel.MotorType.kBrushless);
+  private ArrayList<CANSparkMax> leftMotors = new ArrayList<CANSparkMax>(); // define in constructor
+  private ArrayList<CANSparkMax> rightMotors = new ArrayList<CANSparkMax>(); // define in constructor
+  private ArrayList<CANSparkMax> motors = new ArrayList<CANSparkMax>(); // define in constructor
 
   // define Speed Controller Groups and Differential Drive for use in drive train
-  private final MotorControllerGroup driveGroupLeft = new MotorControllerGroup(motorDriveLeft1, motorDriveLeft2, motorDriveLeft3);
-  private final MotorControllerGroup driveGroupRight = new MotorControllerGroup(motorDriveRight1, motorDriveRight2, motorDriveRight3);
-  private final DifferentialDrive differentialDrive = new DifferentialDrive(driveGroupLeft, driveGroupRight);
+  private final CANSparkMax driveMainLeft = motorDriveLeft1;
+  private final CANSparkMax driveMainRight = motorDriveRight1;
+  private final DifferentialDrive differentialDrive = new DifferentialDrive(driveMainLeft, driveMainRight);
 
   private RelativeEncoder m_leftEncoder;
   private RelativeEncoder m_rightEncoder;
@@ -42,33 +43,47 @@ public class DriveTrain extends SubsystemBase {
   // navX Gyro on RoboRIO 2.0
   public AHRS m_Gyro;
 
-  private final boolean kSquareInputs = true;
   private final boolean kSkipGyro = false;
   private int counter = 0; // for limiting display
   private double speedMultiplier = DriveConstants.drivingMax;
+  public boolean isHighGear = false;
+  public boolean isSlowMode = false;
 
   private DoubleSolenoid gearChanger;
 
   public DriveTrain() {
     System.out.print("Instatntiating drivetrain");
-    motors.add(motorDriveLeft1);
-    motors.add(motorDriveLeft2);
-    motors.add(motorDriveLeft3);
-    motors.add(motorDriveRight1);
-    motors.add(motorDriveRight2);
-    motors.add(motorDriveRight3);
+    leftMotors.add(motorDriveLeft1);
+    leftMotors.add(motorDriveLeft2);
+    leftMotors.add(motorDriveLeft3);
+    rightMotors.add(motorDriveRight1);
+    rightMotors.add(motorDriveRight2);
+    rightMotors.add(motorDriveRight3);
+    motors.addAll(leftMotors);
+    motors.addAll(rightMotors);
 
+    // Sync side motors
+    for (CANSparkMax motor : leftMotors) {
+      if (motor != motorDriveLeft1) {
+        motor.follow(motorDriveLeft1);
+      }
+    }
+    for (CANSparkMax motor : rightMotors) {
+      if (motor != motorDriveRight1) {
+        motor.follow(motorDriveRight1);
+      }
+    }
     for (CANSparkMax motor : motors) {
       motor.restoreFactoryDefaults();
       motor.setSmartCurrentLimit(DriveConstants.driveAmpsMax);
       motor.setClosedLoopRampRate(DriveConstants.drivingRamp);
       motor.setOpenLoopRampRate(DriveConstants.drivingRamp);
-      // motor.setIdleMode(IdleMode.kCoast);
+      motor.setIdleMode(IdleMode.kCoast);
       motor.enableVoltageCompensation(11);
     }
 
     // Invert 1 side of robot so will drive forward
-    driveGroupLeft.setInverted(true);
+    driveMainLeft.setInverted(true);
 
     differentialDrive.setSafetyEnabled(false);
 
@@ -121,14 +136,14 @@ public class DriveTrain extends SubsystemBase {
       System.out.println("**driveTrain power L/R: " + leftDrivePercent + " | " + rightDrivePercent);
     }
     if (Math.abs(leftDrivePercent) > 0.01) {
-      driveGroupLeft.set(rightDrivePercent);
+      driveMainLeft.set(rightDrivePercent);
     } else {
-      driveGroupLeft.stopMotor();
+      driveMainLeft.stopMotor();
     }
     if (Math.abs(rightDrivePercent) > 0.01) {
-      driveGroupRight.set(rightDrivePercent);
+      driveMainRight.set(rightDrivePercent);
     } else {
-      driveGroupRight.stopMotor();
+      driveMainRight.stopMotor();
     }
   }
 
@@ -141,7 +156,7 @@ public class DriveTrain extends SubsystemBase {
   public void doArcadeDrive(double speed, double rotation) {
     // if (counter++ % 100 == 0) { System.out.println("**arcadeDrive power
     // speed/rotation: " + speed+"-"rotation); }
-    differentialDrive.arcadeDrive(speed, rotation, kSquareInputs);
+    differentialDrive.arcadeDrive(speed * speedMultiplier, rotation);
   }
 
   public double getHeadingAngle() {
@@ -174,24 +189,25 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getLeftDistanceInch() {
-    // return Math.PI * DriveConstants.WHEEL_DIAMETER * (getLeftEncoderCount() /
-    // DriveConstants.PULSES_PER_REVOLUTION);
-    return 0.0;
+    return Math.PI * DriveConstants.WHEEL_DIAMETER * (getLeftEncoderCount() /
+    DriveConstants.PULSES_PER_REVOLUTION);
+    // return 0.0;
   }
 
   public double getRightDistanceInch() {
-    // return Math.PI * DriveConstants.WHEEL_DIAMETER * (getRightEncoderCount() /
-    // DriveConstants.PULSES_PER_REVOLUTION);
-    return 0.0;
+    return Math.PI * DriveConstants.WHEEL_DIAMETER * (getRightEncoderCount() /
+    DriveConstants.PULSES_PER_REVOLUTION);
+    // return 0.0;
   }
 
   public double getAveDistanceInch() {
-    // return (getLeftDistanceInch() + getRightDistanceInch()) / 2.0;
-    return 0.0;
+    return (getLeftDistanceInch() + getRightDistanceInch()) / 2.0;
+    // return 0.0;
   }
 
   // Function to set the solenoids
   public void doHighGear(boolean fast) {
+    isHighGear = fast;
     if (fast) {
       gearChanger.set(DoubleSolenoid.Value.kReverse);
       System.out.println("Gear shifter set to High Speed Mode");
@@ -203,10 +219,11 @@ public class DriveTrain extends SubsystemBase {
 
   /** Artificial speed limit, 1/3 */
   public void doSlowMode(boolean slow) {
+    isSlowMode = slow;
     if (slow) {
       speedMultiplier = 0.3;
     } else {
-      speedMultiplier = 1;
+      speedMultiplier = DriveConstants.drivingMax;
     }
   }
 
@@ -216,11 +233,11 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getLeftSpeed() {
-    return driveGroupLeft.get();
+    return driveMainLeft.get();
   }
 
   public double getRightSpeed() {
-    return driveGroupRight.get();
+    return driveMainRight.get();
   }
 
   public double getAveCurrent() {
@@ -231,17 +248,17 @@ public class DriveTrain extends SubsystemBase {
     return current / motors.size();
   }
 
-  // public void setBrakeMode(boolean brake) {
-  //   if (brake) {
-  //     for (CANSparkMax motor : motors) {
-  //       motor.setIdleMode(IdleMode.kBrake);
-  //     }
-  //   } else {
-  //     for (CANSparkMax motor : motors) {
-  //       motor.setIdleMode(IdleMode.kCoast);
-  //     }
-  //   }
-  // }
+  public void setBrakeMode(boolean brake) {
+    if (brake) {
+      for (CANSparkMax motor : motors) {
+        motor.setIdleMode(IdleMode.kBrake);
+      }
+    } else {
+      for (CANSparkMax motor : motors) {
+        motor.setIdleMode(IdleMode.kCoast);
+      }
+    }
+  }
 
   public void resetAll() {
     System.out.println("Resetting DriveTrain");
