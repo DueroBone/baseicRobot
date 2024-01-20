@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import java.util.ArrayList;
 
-public class DriveTrain extends SubsystemBase {
+public class DriveTrainOld extends SubsystemBase {
 
   //// ----- Motor Controllers ----- /////
   // There are 6 separate motor controllers with 1 pwm channel per controller
@@ -51,7 +51,7 @@ public class DriveTrain extends SubsystemBase {
 
   private DoubleSolenoid gearChanger;
 
-  public DriveTrain() {
+  public DriveTrainOld() {
     System.out.print("Instatntiating drivetrain");
     leftMotors.add(motorDriveLeft1);
     leftMotors.add(motorDriveLeft2);
