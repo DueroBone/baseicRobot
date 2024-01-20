@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SyncedLibraries.Controllers;
 import frc.robot.SyncedLibraries.Controllers.ControllerBase;
-import frc.robot.commands.TeleDriveCommand;
+import frc.robot.SyncedLibraries.SystemBases.TeleDriveCommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 public class Robot extends TimedRobot {
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
     }
 
     // start main driving command
-    CommandScheduler.getInstance().schedule(new TeleDriveCommand());
+    CommandScheduler.getInstance().schedule(new TeleDriveCommandBase());
   }
 
   @Override
