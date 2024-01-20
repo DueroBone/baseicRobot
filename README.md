@@ -13,3 +13,5 @@ Odds are, if you are reading this because you cloned through the GUI, so use the
 # When using
 
 This is designed to be a template scaffold for future robots. Do not put production code inside of this project.
+
+Also note the sub-repository [SyncedLibraries](https://github.com/TribeTech4485/SyncedLibraries). The README should explain the basics.
