@@ -5,15 +5,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SyncedLibraries.Controllers;
 import frc.robot.SyncedLibraries.Controllers.ControllerBase;
+import frc.robot.SyncedLibraries.SystemBases.LimelightBase;
 import frc.robot.SyncedLibraries.SystemBases.TeleDriveCommandBase;
+import frc.robot.SyncedLibraries.RobotState;
 import frc.robot.subsystems.DriveTrainOld;
 
 public class Robot extends TimedRobot {
   public static RobotContainer m_robotContainer;
   public static Command AutonomousCommand;
   public static DriveTrainOld DriveTrain;
+  public static LimelightBase Limelight;
 
-  private static Controllers m_controllers = new Controllers(Constants.DriveConstants.controllerJoystickDeadband, Constants.DriveConstants.controllerTriggerDeadband);
+
+  /**
+   * The current state of the robot
+   * <p>
+   * KEEP UPDATED
+   */
+  public static RobotState robotState;
+
+  private static Controllers m_controllers = new Controllers(Constants.DriveConstants.controllerJoystickDeadband,
+      Constants.DriveConstants.controllerTriggerDeadband);
   /** Driver */
   public static ControllerBase Zero = m_controllers.Zero;
   /** Copiolot */
@@ -32,6 +44,7 @@ public class Robot extends TimedRobot {
   /** Person controlling shooting */
   public static ControllerBase Secondary = m_controllers.Secondary;
 
+
   @Override
   public void robotInit() {
     System.out.println("Robot Init");
@@ -39,6 +52,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     AutonomousCommand = m_robotContainer.getAutonomousCommand();
     DriveTrain = new DriveTrainOld();
+    Limelight = new LimelightBase();
 
     m_controllers.fullUpdate();
     Three.setJoystickMultiplier(0.5);
@@ -57,9 +71,10 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     System.out.println("Robot Disabled");
   }
-
+  
   @Override
   public void disabledPeriodic() {
+    robotState = RobotState.Disabled;
   }
 
   @Override

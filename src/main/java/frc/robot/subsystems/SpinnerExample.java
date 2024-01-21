@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import frc.robot.Constants;
 // import frc.robot.Constants.DeviceConstants;
 // import frc.robot.Constants.DriveConstants;
@@ -37,6 +38,10 @@ public class SpinnerExample extends ManipulatorBase {
   }
 
   public void shoot() {
-    moveToPosition(360);
+    setTargetSpeed(360);
+    getSpeedCommand().setUponTarget(new InstantCommand(() -> {
+      
+      setTargetSpeed(0);
+    }));
   }
 }
