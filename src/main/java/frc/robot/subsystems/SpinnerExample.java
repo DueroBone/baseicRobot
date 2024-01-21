@@ -40,7 +40,6 @@ public class SpinnerExample extends ManipulatorBase {
   public void shoot() {
     setTargetSpeed(360);
     getSpeedCommand().setUponTarget(new InstantCommand(() -> {
-      
       setTargetSpeed(0);
     }));
   }
