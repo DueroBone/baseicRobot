@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     System.out.println("Robot Init");
 
     m_controllers.fullUpdate();
-    Three.setJoystickMultiplier(0.5);
+    // Three.setJoystickMultiplier(0.5);
     m_controllers.addControllers(m_controllers.primaryControllerSelector, Zero, Two, Three);
     m_controllers.addControllers(m_controllers.secondaryControllerSelector, One, Two, Three);
     m_controllers.fullUpdate();
