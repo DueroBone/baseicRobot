@@ -49,16 +49,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     System.out.println("Robot Init");
 
-    m_robotContainer = new RobotContainer();
-    AutonomousCommand = m_robotContainer.getAutonomousCommand();
-    DriveTrain = new DriveTrainOld();
-    Limelight = new LimelightBase();
-
     m_controllers.fullUpdate();
     Three.setJoystickMultiplier(0.5);
     m_controllers.addControllers(m_controllers.primaryControllerSelector, Zero, Two, Three);
     m_controllers.addControllers(m_controllers.secondaryControllerSelector, One, Two, Three);
     m_controllers.fullUpdate();
+    
+    m_robotContainer = new RobotContainer();
+    AutonomousCommand = m_robotContainer.getAutonomousCommand();
+    DriveTrain = new DriveTrainOld();
+    Limelight = new LimelightBase();
   }
 
   @Override
