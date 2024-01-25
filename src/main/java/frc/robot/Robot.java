@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().cancelAll();
     m_controllers.fullUpdate();
-    Robot.DriveTrain.resetAll(); //Deez
+    Robot.DriveTrain.resetAll();
     // Home all motors and sensors
     // spin up shooter
     // turn on intake
