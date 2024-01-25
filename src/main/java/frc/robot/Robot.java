@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
     m_controllers.addControllers(m_controllers.primaryControllerSelector, Zero, Two, Three);
     m_controllers.addControllers(m_controllers.secondaryControllerSelector, One, Two, Three);
     m_controllers.fullUpdate();
-    
+
     m_robotContainer = new RobotContainer();
     AutonomousCommand = m_robotContainer.getAutonomousCommand();
     DriveTrain = new DriveTrainOld();
@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().cancelAll();
     m_controllers.fullUpdate();
-    Robot.DriveTrain.resetAll();
+    Robot.DriveTrain.resetAll(); //Deez
     // Home all motors and sensors
     // spin up shooter
     // turn on intake
