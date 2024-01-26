@@ -36,9 +36,9 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> {
           Robot.DriveTrain.setBrakeMode(false);
         }));
-    Robot.Primary.X
-        .onTrue(new InstantCommand(() -> {
-          Robot.Limelight.alignTag();
-        }));
+    // Robot.Primary.X
+    //     .onTrue(new InstantCommand(() -> {
+    //       Robot.Limelight.alignTag();
+    //     }));
   }
 }
