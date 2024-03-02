@@ -1,11 +1,18 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SyncedLibraries.Controllers;
 import frc.robot.SyncedLibraries.Controllers.ControllerBase;
 import frc.robot.SyncedLibraries.SystemBases.DriveTrainBase;
+import frc.robot.SyncedLibraries.SystemBases.LedBase;
 import frc.robot.SyncedLibraries.SystemBases.LimelightBase;
 import frc.robot.SyncedLibraries.SystemBases.TeleDriveCommandBase;
 import frc.robot.SyncedLibraries.RobotState.*;
@@ -42,9 +49,16 @@ public class Robot extends TimedRobot {
   public static ControllerBase Five = m_controllers.Five;
 
   /** Person controlling driving */
-  public static ControllerBase Primary = m_controllers.Primary;
+  public static ControllerBase Primary = Zero;
   /** Person controlling shooting */
-  public static ControllerBase Secondary = m_controllers.Secondary;
+  // public static ControllerBase Secondary = m_controllers.Secondary;
+
+  LedBase leds;
+  public static TeleDriveCommandBase teleDriveCommandBase;
+
+  PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
+
+  private int counter = 0;
 
   @Override
   public void robotInit() {
@@ -52,20 +66,38 @@ public class Robot extends TimedRobot {
 
     m_controllers.fullUpdate();
     // Three.setJoystickMultiplier(0.5);
-    m_controllers.addControllers(m_controllers.primaryControllerSelector, Zero, Two, Three);
-    m_controllers.addControllers(m_controllers.secondaryControllerSelector, One, Two, Three);
+    // m_controllers.addControllers(m_controllers.primaryControllerSelector, Zero,
+    // Two, Three);
+    // m_controllers.addControllers(m_controllers.secondaryControllerSelector, One,
+    // Two, Three);
     m_controllers.fullUpdate();
 
     m_robotContainer = new RobotContainer();
     AutonomousCommand = m_robotContainer.getAutonomousCommand();
-    DriveTrain = new DriveTrainNew(null, null, null, null, isAutonomousEnabled(), kDefaultPeriod, 0, 0, kDefaultPeriod, kDefaultPeriod, isAutonomous());
+    DriveTrain = new DriveTrainBase(new CANSparkMax[] {
+        new CANSparkMax(1, MotorType.kBrushless),
+        new CANSparkMax(2, MotorType.kBrushless) },
+        new CANSparkMax[] {
+            new CANSparkMax(3, MotorType.kBrushless),
+            new CANSparkMax(4, MotorType.kBrushless) },
+        null, new int[0], false, 1, 0, 0, kDefaultPeriod,
+        kDefaultPeriod, true);
+    // DriveTrain.invertAll();
     Limelight = new LimelightBase();
+    leds = new LedBase(1, 60, 90);
+    leds.sections[0].init(05, 3, Color.kRed, new Color(0, 255, 0), Color.kBlue).doMoveBackward();
+    leds.sections[1].init(10, 0.00001, Color.kRed, new Color(0, 255, 0),
+        Color.kBlue).doRainbow();
+    teleDriveCommandBase = new TeleDriveCommandBase(DriveTrain, false, Zero);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_controllers.updateAutoControllers();
+    // m_controllers.updateAutoControllers();
+    if (counter++ % 500 == 0) {
+      System.out.println(pdp.getVoltage());
+    }
   }
 
   @Override
@@ -102,7 +134,7 @@ public class Robot extends TimedRobot {
     }
 
     // start main driving command
-    CommandScheduler.getInstance().schedule(new TeleDriveCommandBase());
+    CommandScheduler.getInstance().schedule(teleDriveCommandBase);
   }
 
   @Override
