@@ -3,12 +3,14 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.SyncedLibraries.BasicFunctions;
 import frc.robot.SyncedLibraries.Controllers;
 import frc.robot.SyncedLibraries.Controllers.ControllerBase;
 import frc.robot.SyncedLibraries.SystemBases.DriveTrainBase;
@@ -103,6 +105,9 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     System.out.println("Robot Disabled");
+    if (DriverStation.isEStopped()) {
+      BasicFunctions.KILLIT(DriveTrain);
+    }
   }
 
   @Override
