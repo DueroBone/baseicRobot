@@ -16,15 +16,15 @@ import frc.robot.SyncedLibraries.Controllers.ControllerBase;
 import frc.robot.SyncedLibraries.SystemBases.DriveTrainBase;
 import frc.robot.SyncedLibraries.SystemBases.LedBase;
 import frc.robot.SyncedLibraries.SystemBases.LimelightBase;
+import frc.robot.SyncedLibraries.SystemBases.SwerveDriveBase;
 import frc.robot.SyncedLibraries.SystemBases.TeleDriveCommandBase;
 import frc.robot.SyncedLibraries.RobotState.*;
-import frc.robot.subsystems.DriveTrainNew;
-import frc.robot.subsystems.DriveTrainOld;
 
 public class Robot extends TimedRobot {
   public static RobotContainer m_robotContainer;
   public static Command AutonomousCommand;
   public static DriveTrainBase DriveTrain;
+  public static SwerveDriveBase SwerveDrive;
   public static LimelightBase Limelight;
 
   /**
