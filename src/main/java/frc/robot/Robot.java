@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -77,14 +78,41 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer();
     AutonomousCommand = m_robotContainer.getAutonomousCommand();
-    DriveTrain = new DriveTrainBase(new CANSparkMax[] {
-        new CANSparkMax(1, MotorType.kBrushless),
-        new CANSparkMax(2, MotorType.kBrushless) },
+    /*
+     * DriveTrain = new DriveTrainBase(new CANSparkMax[] {
+     * new CANSparkMax(1, MotorType.kBrushless),
+     * new CANSparkMax(2, MotorType.kBrushless) },
+     * new CANSparkMax[] {
+     * new CANSparkMax(3, MotorType.kBrushless),
+     * new CANSparkMax(4, MotorType.kBrushless) },
+     * null, new int[0], false, 1, 0, 0, kDefaultPeriod,
+     * kDefaultPeriod, true);
+     */
+    SwerveDrive = new SwerveDriveBase(
+        // turnMotors
         new CANSparkMax[] {
+            new CANSparkMax(1, MotorType.kBrushless),
+            new CANSparkMax(2, MotorType.kBrushless),
             new CANSparkMax(3, MotorType.kBrushless),
             new CANSparkMax(4, MotorType.kBrushless) },
-        null, new int[0], false, 1, 0, 0, kDefaultPeriod,
-        kDefaultPeriod, true);
+        // absoluteEncoders
+        new CANcoder[] {
+            new CANcoder(1),
+            new CANcoder(2),
+            new CANcoder(3),
+            new CANcoder(4) },
+        // absoluteTurnOffset
+        new double[] { 0, 0, 0, 0 }, (double) 150 / 7,
+        // driveMotors
+        new CANSparkMax[] {
+            new CANSparkMax(9, MotorType.kBrushless),
+            new CANSparkMax(10, MotorType.kBrushless),
+            new CANSparkMax(11, MotorType.kBrushless),
+            new CANSparkMax(12, MotorType.kBrushless) },
+        1,
+        // amps
+        new int[] { 10, 10 }, 1, 0, 0, 1);
+
     // DriveTrain.invertAll();
     Limelight = new LimelightBase();
     leds = new LedBase(1, 60, 90);
