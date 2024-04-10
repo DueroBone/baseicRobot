@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.SyncedLibraries.AutoControllerSelector;
 import frc.robot.SyncedLibraries.BasicFunctions;
 import frc.robot.SyncedLibraries.Controllers;
 import frc.robot.SyncedLibraries.Controllers.ControllerBase;
@@ -90,7 +91,9 @@ public class Robot extends TimedRobot {
     leds.sections[0].init(05, 3, Color.kRed, new Color(0, 255, 0), Color.kBlue).doMoveBackward();
     leds.sections[1].init(10, 0.00001, Color.kRed, new Color(0, 255, 0),
         Color.kBlue).doRainbow();
-    teleDriveCommandBase = new TeleDriveCommandBase(DriveTrain, false, Zero);
+    // teleDriveCommandBase = new TeleDriveCommandBase(DriveTrain, false, Zero);
+    teleDriveCommandBase = new TeleDriveCommandBase(SwerveDrive,
+        new AutoControllerSelector(m_controllers).addController(0));
   }
 
   @Override
