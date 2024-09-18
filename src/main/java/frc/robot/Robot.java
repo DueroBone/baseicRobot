@@ -91,27 +91,27 @@ public class Robot extends TimedRobot {
     SwerveDrive = new SwerveDriveBase(
         // turnMotors
         new CANSparkMax[] {
-            new CANSparkMax(1, MotorType.kBrushless),
             new CANSparkMax(2, MotorType.kBrushless),
-            new CANSparkMax(3, MotorType.kBrushless),
-            new CANSparkMax(4, MotorType.kBrushless) },
+            new CANSparkMax(4, MotorType.kBrushless),
+            new CANSparkMax(6, MotorType.kBrushless),
+            new CANSparkMax(8, MotorType.kBrushless) },
         // absoluteEncoders
         new CANcoder[] {
-            new CANcoder(1),
             new CANcoder(2),
-            new CANcoder(3),
-            new CANcoder(4) },
+            new CANcoder(4),
+            new CANcoder(6),
+            new CANcoder(8) },
         // absoluteTurnOffset
-        new double[] { 0, 0, 0, 0 }, (double) 150 / 7,
+        new double[] { 0, 0, 0, 0 }, (double) 150 / 7, // TODO: TURN MULITPLIER IS WRONg
         // driveMotors
         new CANSparkMax[] {
-            new CANSparkMax(9, MotorType.kBrushless),
-            new CANSparkMax(10, MotorType.kBrushless),
-            new CANSparkMax(11, MotorType.kBrushless),
-            new CANSparkMax(12, MotorType.kBrushless) },
+            new CANSparkMax(1, MotorType.kBrushless),
+            new CANSparkMax(3, MotorType.kBrushless),
+            new CANSparkMax(5, MotorType.kBrushless),
+            new CANSparkMax(7, MotorType.kBrushless) },
         1,
         // amps
-        new int[] { 10, 10 }, 1, 0, 0, 1);
+        new int[] { 10, 10 }, 0.1, 0, 0, 0);
 
     // DriveTrain.invertAll();
     Limelight = new LimelightBase();

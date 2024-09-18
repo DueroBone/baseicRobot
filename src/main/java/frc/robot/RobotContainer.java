@@ -42,13 +42,13 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> {
     //       Robot.Limelight.alignTag();
     //     }));
-    Robot.Zero.A.get().onTrue(new InstantCommand(() -> {
-      CommandScheduler.getInstance().cancel(Robot.teleDriveCommandBase);
-      Robot.DriveTrain.doTankDrive(1, 1);
-    }));
-    Robot.Zero.B.get().onTrue(new InstantCommand(() -> {
-      CommandScheduler.getInstance().schedule(Robot.teleDriveCommandBase);
-    }));
+    // Robot.Zero.A.get().onTrue(new InstantCommand(() -> {
+    //   CommandScheduler.getInstance().cancel(Robot.teleDriveCommandBase);
+    //   Robot.DriveTrain.doTankDrive(1, 1);
+    // }));
+    // Robot.Zero.B.get().onTrue(new InstantCommand(() -> {
+    //   CommandScheduler.getInstance().schedule(Robot.teleDriveCommandBase);
+    // }));
 
     Robot.Zero.LeftBumper.get()
             .and(Robot.Zero.LeftTrigger.get())
